@@ -26,9 +26,12 @@ public:
         this->text.setPosition(sf::Vector2f(x + width / 2.0f, y + height / 2.0f));
 
         if (!imagePath.empty()) {
-            cout << "Hello" << endl;
+
             if (!texture.loadFromFile(imagePath)) {
-                std::cout << "Failed to load texture from file: " << imagePath << std::endl;
+                cout << "Failed to load texture from file: " << imagePath << endl;
+            }
+            else {
+                cout << "Texture loaded successfully from file: " << imagePath << endl;
             }
             sprite.setTexture(texture);
             sprite.setPosition(sf::Vector2f(x, y));
@@ -45,13 +48,14 @@ public:
     void draw(sf::RenderWindow& window) {
         window.draw(shape);
         window.draw(text);
+        window.draw(sprite);
     }
 
     sf::Text text;
 };
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode(800, 800), "SFML Buttons");
+    sf::RenderWindow window(sf::VideoMode(800, 800), "DSA FINAL");
 
     sf::Font font;
     if (!font.loadFromFile("font.ttf")) {
@@ -66,10 +70,11 @@ int main() {
     buttons.emplace_back(50, 735, 200, 50, font, "Button 4");
     buttons.emplace_back(300, 735, 200, 50, font, "Button 5");
     buttons.emplace_back(550, 735, 200, 50, font, "Button 6");
-    buttons.emplace_back(100, 500, 250, 150, font, "TOP 5\n1. Orlando Magic\n2. LA Lakers\n3. Miami Heat\n4. LA Lakers\n5. Orlando Magic");
+    buttons.emplace_back(100, 500, 250, 150, font, "TOP 5:\n1. Orlando Magic\n2. LA Lakers\n3. Miami Heat\n4. LA Lakers\n5. Orlando Magic");
     buttons.emplace_back(450, 500, 250, 150, font, "BOTTOM 5");
+    buttons.emplace_back(150, 30, 500, 50, font, "PLEASE SELECT AN OPTION FROM DOWN BELOW");
 
-    buttons.emplace_back(90, 60, 620, 410,font,"", "Map.png");
+    buttons.emplace_back(80, 100, 640, 390,font,"bruh", "map.png");
 
     while (window.isOpen()) {
         sf::Event event;
