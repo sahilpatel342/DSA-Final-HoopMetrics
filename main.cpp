@@ -70,9 +70,10 @@ int main() {
     buttons.emplace_back(50, 735, 200, 50, font, "Button 4");
     buttons.emplace_back(300, 735, 200, 50, font, "Button 5");
     buttons.emplace_back(550, 735, 200, 50, font, "Button 6");
-    buttons.emplace_back(100, 500, 250, 150, font, "TOP 5:\n1. Orlando Magic\n2. LA Lakers\n3. Miami Heat\n4. LA Lakers\n5. Orlando Magic");
-    buttons.emplace_back(450, 500, 250, 150, font, "BOTTOM 5");
+    buttons.emplace_back(25, 500, 250, 150, font, "TOP 5:\n1. Orlando Magic\n2. LA Lakers\n3. Miami Heat\n4. LA Lakers\n5. Orlando Magic");
+    buttons.emplace_back(525, 500, 250, 150, font, "BOTTOM 5");
     buttons.emplace_back(150, 30, 500, 50, font, "PLEASE SELECT AN OPTION FROM DOWN BELOW");
+    buttons.emplace_back(300, 525, 200, 100, font, "Merge Sort:\nSelection Sort:");
 
     buttons.emplace_back(80, 100, 640, 390,font,"bruh", "map.png");
 
@@ -84,17 +85,22 @@ int main() {
 
             if (event.type == sf::Event::MouseButtonPressed) {
                 if (event.mouseButton.button == sf::Mouse::Left) {
+                    sf::Vector2f mouse = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+                    int x = mouse.x;
+                    int y = mouse.y;
+                    cout << x << endl;
+                    cout << y << endl;
                     for (auto& button : buttons) {
                         if (button.isMouseOver(window)) {
                             std::cout << "Button clicked: " << button.text.getString().toAnsiString() << std::endl;
-                            // You can add specific actions for each button here
+                            buttons.emplace_back(x, y, 17, 25,font,"", "pin.png");
                         }
                     }
                 }
             }
         }
-
-        window.clear(sf::Color::White);
+        sf::Color color(151, 151, 151);
+        window.clear(color);
         for (auto& button : buttons) {
             button.draw(window);
         }
@@ -103,3 +109,37 @@ int main() {
 
     return 0;
 }
+
+
+/*
+Trailblazers: (111, 131)
+Warriors: (98, 236)
+Kings: (106, 220)
+Clippers: (124, 291)
+Lakers: (115, 275)
+Suns: (204, 321)
+Jazz: (216, 221)
+Nuggets: (307, 245)
+OKC: (379, 306)
+Timberwolves: (407, 149)
+Bucks: (485, 197)
+Bulls: (484, 211)
+Pacers: (507, 248)
+Pistons: (536, 197)
+Cavs: (555, 206)
+Toronto: (578, 175)
+Mavs: (384, 344)
+Spurs: (360, 385)
+Rockets: (410, 388)
+Pelicans: (473, 377)
+Grizzlies: (476, 303)
+Hawks: (536, 316)
+Magic: (595, 389)
+Heat: (613, 410)
+Hornets: (587, 298)
+Wizards: (625, 239)
+Sixers: (644, 222)
+Nets: (664, 205)
+Knicks: (651, 202)
+Celtics: (676, 184)
+*/
