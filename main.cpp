@@ -30,9 +30,7 @@ public:
             if (!texture.loadFromFile(imagePath)) {
                 cout << "Failed to load texture from file: " << imagePath << endl;
             }
-            else {
-                cout << "Texture loaded successfully from file: " << imagePath << endl;
-            }
+
             sprite.setTexture(texture);
             sprite.setPosition(sf::Vector2f(x, y));
             sprite.setScale(width / texture.getSize().x, height / texture.getSize().y);
@@ -64,20 +62,22 @@ int main() {
     }
 
     std::vector<Button> buttons;
-    buttons.emplace_back(50, 670, 200, 50, font, "Button 1");
-    buttons.emplace_back(300, 670, 200, 50, font, "Button 2");
-    buttons.emplace_back(550, 670, 200, 50, font, "Button 3");
-    buttons.emplace_back(50, 735, 200, 50, font, "Button 4");
-    buttons.emplace_back(300, 735, 200, 50, font, "Button 5");
-    buttons.emplace_back(550, 735, 200, 50, font, "Button 6");
-    buttons.emplace_back(25, 500, 250, 150, font, "TOP 5:\n1. Orlando Magic\n2. LA Lakers\n3. Miami Heat\n4. LA Lakers\n5. Orlando Magic");
-    buttons.emplace_back(525, 500, 250, 150, font, "BOTTOM 5");
-    buttons.emplace_back(150, 30, 500, 50, font, "PLEASE SELECT AN OPTION FROM DOWN BELOW");
-    buttons.emplace_back(300, 525, 200, 100, font, "Merge Sort:\nSelection Sort:");
-
-    buttons.emplace_back(80, 100, 640, 390,font,"bruh", "map.png");
 
     while (window.isOpen()) {
+
+        buttons.emplace_back(50, 670, 200, 50, font, "Button 1");
+        buttons.emplace_back(300, 670, 200, 50, font, "Button 2");
+        buttons.emplace_back(550, 670, 200, 50, font, "Button 3");
+        buttons.emplace_back(50, 735, 200, 50, font, "Button 4");
+        buttons.emplace_back(300, 735, 200, 50, font, "Button 5");
+        buttons.emplace_back(550, 735, 200, 50, font, "Button 6");
+        buttons.emplace_back(25, 500, 250, 150, font, "TOP 5:\n1. Orlando Magic\n2. LA Lakers\n3. Miami Heat\n4. LA Lakers\n5. Orlando Magic");
+        buttons.emplace_back(525, 500, 250, 150, font, "BOTTOM 5");
+        buttons.emplace_back(150, 30, 500, 50, font, "PLEASE SELECT AN OPTION FROM DOWN BELOW");
+        buttons.emplace_back(300, 525, 200, 100, font, "Merge Sort:\nSelection Sort:");
+
+        buttons.emplace_back(80, 100, 640, 390,font,"bruh", "map.png");
+
         sf::Event event;
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
@@ -105,6 +105,7 @@ int main() {
             button.draw(window);
         }
         window.display();
+        buttons.clear();
     }
 
     return 0;
