@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <vector>
+#include "NBA_Data_Manip"
 
 using namespace std;
 
@@ -53,6 +54,30 @@ public:
 };
 
 int main() {
+
+    std::unordered_map<std::string, Team> teams;
+    std::vector<Game> games;
+
+    load_teams("teams.csv", teams);
+    load_games("games.csv", games);
+
+    //cout << games[0].home_team_id << endl;
+
+
+    for (auto i = teams.begin(); i != teams.end(); i++) {
+        cout << i->first << "-" << i->second.team_name << endl;
+    }
+
+    /*
+    cout << "\n\n\n\n" << endl;
+
+    for (auto j : games) {
+        cout << j.pts_away << endl;
+    }
+     */
+
+
+    /*
     sf::RenderWindow window(sf::VideoMode(800, 800), "DSA FINAL");
 
     sf::Font font;
@@ -107,6 +132,7 @@ int main() {
         window.display();
         buttons.clear();
     }
+     */
 
     return 0;
 }

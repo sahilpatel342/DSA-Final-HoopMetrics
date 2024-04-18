@@ -5,6 +5,8 @@
 #include <vector>
 #include <unordered_map>
 
+using namespace std;
+
 struct Team {
     std::string team_id;
     std::string team_name;
@@ -64,6 +66,7 @@ void load_games(const std::string& filename, std::vector<Game>& games) {
     }
 }
 
+/*
 int main() {
     std::unordered_map<std::string, Team> teams;
     std::vector<Game> games;
@@ -71,7 +74,17 @@ int main() {
     load_teams("teams.csv", teams);
     load_games("games.csv", games);
 
+    for (auto i = teams.begin(); i != teams.end(); i++) {
+        std::cout << i->first << "-" << i->second.team_name << endl;
+    }
+
+    cout << "\n\n\n\n" << endl;
+
+    for (auto j : games) {
+        std::cout << j.pts_away << endl;
+    }
     // Further processing, merging, and analysis logic here
 
     return 0;
 }
+*/
