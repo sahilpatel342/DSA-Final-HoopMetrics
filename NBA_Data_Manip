@@ -1,0 +1,77 @@
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <vector>
+#include <unordered_map>
+
+struct Team {
+    std::string team_id;
+    std::string team_name;
+    // Additional fields if necessary
+};
+
+struct Game {
+    std::string date;
+    int season;
+    std::string home_team_id;
+    std::string visitor_team_id;
+    int pts_home;
+    int pts_away;
+    // Additional game stats
+};
+
+// Helper function to split string by delimiter
+std::vector<std::string> split(const std::string& s, char delimiter) {
+    std::vector<std::string> tokens;
+    std::string token;
+    std::istringstream tokenStream(s);
+    while (std::getline(tokenStream, token, delimiter)) {
+        tokens.push_back(token);
+    }
+    return tokens;
+}
+
+// Load teams data
+void load_teams(const std::string& filename, std::unordered_map<std::string, Team>& teams) {
+    std::ifstream file(filename);
+    std::string line;
+    getline(file, line); // Skip header
+    while (getline(file, line)) {
+        auto tokens = split(line, ',');
+        Team team;
+        team.team_id = tokens[1]; // Assuming team_id is at index 1
+        team.team_name = tokens[5]; // Assuming team_name is at index 5
+        teams[team.team_id] = team;
+    }
+}
+
+// Load games data
+void load_games(const std::string& filename, std::vector<Game>& games) {
+    std::ifstream file(filename);
+    std::string line;
+    getline(file, line); // Skip header
+    while (getline(file, line)) {
+        auto tokens = split(line, ',');
+        Game game;
+        game.date = tokens[0]; // Assuming date is at index 0
+        game.season = std::stoi(tokens[5]); // Assuming season is at index 5
+        game.home_team_id = tokens[3]; // Assuming home_team_id is at index 3
+        game.visitor_team_id = tokens[4]; // Assuming visitor_team_id is at index 4
+        game.pts_home = std::stoi(tokens[6]); // Assuming pts_home is at index 6
+        game.pts_away = std::stoi(tokens[14]); // Assuming pts_away is at index 14
+        games.push_back(game);
+    }
+}
+
+int main() {
+    std::unordered_map<std::string, Team> teams;
+    std::vector<Game> games;
+
+    load_teams("teams.csv", teams);
+    load_games("games.csv", games);
+
+    // Further processing, merging, and analysis logic here
+
+    return 0;
+}
