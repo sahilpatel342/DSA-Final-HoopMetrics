@@ -58,7 +58,19 @@ int main() {
     std::unordered_map<std::string, Team> teams;
     std::vector<Game> games;
 
-    std::vector<string> regular_season_list;
+    std::vector<string> regular_season_list_merge = {"Magic", "Heat", "Warriors", "Lakers", "Pacers"};
+    std::vector<string> regular_season_list_min = {"Hornets", "Pistons", "Wizards", "Warriors", "Jazz"};
+
+    std::vector<string> FTP_list_merge = {"Hawks", "Thunder", "Rockets", "Spurs", "Jazz"};
+    std::vector<string> FTP_list_min = {"Suns", "Pistons", "Wizards", "Warriors", "Pelicans"};
+
+    std::vector<string> PD_list_merge = {"Kings", "Pistons", "Wizards", "Celtics", "Jazz"};
+    std::vector<string> PD_list_min = {"Raptors", "76ers", "Wizards", "Bucks", "Timberwolves"};
+
+    std::vector<string> FGP_list_merge = {"Mavericks", "Pistons", "Knicks", "Warriors", "Jazz"};
+    std::vector<string> FGP_list_min = {"Trail Blazers", "Bulls", "Wizards", "Warriors", "76ers"};
+
+    string currentSelection = "Regular Season Wins";
 
     load_teams("teams.csv", teams);
     //load_games("games.csv", games);
@@ -69,16 +81,6 @@ int main() {
     for (auto i = teams.begin(); i != teams.end(); i++) {
         cout << i->first << "-" << i->second.team_name << endl;
     }
-
-    /*
-    cout << "\n\n\n\n" << endl;
-
-    for (auto j : games) {
-        cout << j.pts_away << endl;
-    }
-     */
-
-
 
     sf::RenderWindow window(sf::VideoMode(800, 800), "DSA FINAL");
 
@@ -92,16 +94,55 @@ int main() {
 
     while (window.isOpen()) {
 
-        buttons.emplace_back(50, 670, 200, 50, font, "Regular Season");
-        buttons.emplace_back(300, 670, 200, 50, font, "Button 2");
-        buttons.emplace_back(550, 670, 200, 50, font, "Button 3");
-        buttons.emplace_back(300, 735, 200, 50, font, "Button 4");
-        buttons.emplace_back(25, 500, 250, 150, font, "TOP 5:\n1. Orlando Magic\n2. LA Lakers\n3. Miami Heat\n4. LA Lakers\n5. Orlando Magic");
-        buttons.emplace_back(525, 500, 250, 150, font, "BOTTOM 5");
-        buttons.emplace_back(150, 30, 500, 50, font, "PLEASE SELECT AN OPTION FROM DOWN BELOW");
-        buttons.emplace_back(300, 525, 200, 100, font, "Merge Sort:\nSelection Sort:");
+        if (currentSelection == "Regular Season Wins") {
+            buttons.emplace_back(75, 670, 275, 50, font, "Regular Season Wins");
+            buttons.emplace_back(75, 735, 275, 50, font, "Field Goal Percentage");
+            buttons.emplace_back(450, 670, 275, 50, font, "Point Differential");
+            buttons.emplace_back(450, 735, 275, 50, font, "Free Throw Percentage");
+            buttons.emplace_back(25, 500, 250, 150, font, "TOP 5:\n1. " + regular_season_list_merge[0] + "\n2. " + regular_season_list_merge[1] + "\n3. " + regular_season_list_merge[2] + "\n4. " + regular_season_list_merge[3] + "\n5. " + regular_season_list_merge[4]);
+            buttons.emplace_back(525, 500, 250, 150, font, "BOTTOM 5:\n1. " + regular_season_list_min[0] + "\n2. " + regular_season_list_min[1] + "\n3. " + regular_season_list_min[2] + "\n4. " + regular_season_list_min[3] + "\n5. " + regular_season_list_min[4]);
+            buttons.emplace_back(150, 30, 500, 50, font, "PLEASE SELECT AN OPTION FROM DOWN BELOW");
+            buttons.emplace_back(300, 525, 200, 100, font, "Merge Sort:\nSelection Sort:");
 
-        buttons.emplace_back(80, 100, 640, 390,font,"bruh", "map.png");
+            buttons.emplace_back(80, 100, 640, 390,font,"bruh", "map.png");
+        }
+        else if (currentSelection == "Field Goal Percentage") {
+            buttons.emplace_back(75, 670, 275, 50, font, "Regular Season Wins");
+            buttons.emplace_back(75, 735, 275, 50, font, "Field Goal Percentage");
+            buttons.emplace_back(450, 670, 275, 50, font, "Point Differential");
+            buttons.emplace_back(450, 735, 275, 50, font, "Free Throw Percentage");
+            buttons.emplace_back(25, 500, 250, 150, font, "TOP 5:\n1. " + FGP_list_merge[0] + "\n2. " + FGP_list_merge[1] + "\n3. " + FGP_list_merge[2] + "\n4. " + FGP_list_merge[3] + "\n5. " + FGP_list_merge[4]);
+            buttons.emplace_back(525, 500, 250, 150, font, "BOTTOM 5:\n1. " + FGP_list_min[0] + "\n2. " + FGP_list_min[1] + "\n3. " + FGP_list_min[2] + "\n4. " + FGP_list_min[3] + "\n5. " + FGP_list_min[4]);
+            buttons.emplace_back(150, 30, 500, 50, font, "PLEASE SELECT AN OPTION FROM DOWN BELOW");
+            buttons.emplace_back(300, 525, 200, 100, font, "Merge Sort:\nSelection Sort:");
+
+            buttons.emplace_back(80, 100, 640, 390,font,"bruh", "map.png");
+        }
+        else if (currentSelection == "Point Differential") {
+            buttons.emplace_back(75, 670, 275, 50, font, "Regular Season Wins");
+            buttons.emplace_back(75, 735, 275, 50, font, "Field Goal Percentage");
+            buttons.emplace_back(450, 670, 275, 50, font, "Point Differential");
+            buttons.emplace_back(450, 735, 275, 50, font, "Free Throw Percentage");
+            buttons.emplace_back(25, 500, 250, 150, font, "TOP 5:\n1. " + PD_list_merge[0] + "\n2. " + PD_list_merge[1] + "\n3. " + PD_list_merge[2] + "\n4. " + PD_list_merge[3] + "\n5. " + PD_list_merge[4]);
+            buttons.emplace_back(525, 500, 250, 150, font, "BOTTOM 5:\n1. " + PD_list_min[0] + "\n2. " + PD_list_min[1] + "\n3. " + PD_list_min[2] + "\n4. " + PD_list_min[3] + "\n5. " + PD_list_min[4]);
+            buttons.emplace_back(150, 30, 500, 50, font, "PLEASE SELECT AN OPTION FROM DOWN BELOW");
+            buttons.emplace_back(300, 525, 200, 100, font, "Merge Sort:\nSelection Sort:");
+
+            buttons.emplace_back(80, 100, 640, 390,font,"bruh", "map.png");
+        }
+
+        else if (currentSelection == "Free Throw Percentage") {
+            buttons.emplace_back(75, 670, 275, 50, font, "Regular Season Wins");
+            buttons.emplace_back(75, 735, 275, 50, font, "Field Goal Percentage");
+            buttons.emplace_back(450, 670, 275, 50, font, "Point Differential");
+            buttons.emplace_back(450, 735, 275, 50, font, "Free Throw Percentage");
+            buttons.emplace_back(25, 500, 250, 150, font, "TOP 5:\n1. " + FTP_list_merge[0] + "\n2. " + FTP_list_merge[1] + "\n3. " + FTP_list_merge[2] + "\n4. " + FTP_list_merge[3] + "\n5. " + FTP_list_merge[4]);
+            buttons.emplace_back(525, 500, 250, 150, font, "BOTTOM 5:\n1. " + FTP_list_min[0] + "\n2. " + FTP_list_min[1] + "\n3. " + FTP_list_min[2] + "\n4. " + FTP_list_min[3] + "\n5. " + FTP_list_min[4]);
+            buttons.emplace_back(150, 30, 500, 50, font, "PLEASE SELECT AN OPTION FROM DOWN BELOW");
+            buttons.emplace_back(300, 525, 200, 100, font, "Merge Sort:\nSelection Sort:");
+
+            buttons.emplace_back(80, 100, 640, 390,font,"bruh", "map.png");
+        }
 
         sf::Event event;
         while (window.pollEvent(event)) {
@@ -118,8 +159,17 @@ int main() {
                     for (auto& button : buttons) {
                         if (button.isMouseOver(window)) {
                             std::cout << "Button clicked: " << button.text.getString().toAnsiString() << std::endl;
-                            if (button.text.getString().toAnsiString() == "Regular Season") {
-
+                            if (button.text.getString().toAnsiString() == "Regular Season Wins") {
+                                currentSelection = "Regular Season Wins";
+                            }
+                            else if (button.text.getString().toAnsiString() == "Field Goal Percentage") {
+                                currentSelection = "Field Goal Percentage";
+                            }
+                            else if (button.text.getString().toAnsiString() == "Point Differential") {
+                                currentSelection = "Point Differential";
+                            }
+                            else if (button.text.getString().toAnsiString() == "Free Throw Percentage") {
+                                currentSelection = "Free Throw Percentage";
                             }
                         }
                     }
