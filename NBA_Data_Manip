@@ -48,25 +48,36 @@ void load_teams(const std::string& filename, std::unordered_map<std::string, Tea
     }
 }
 
-// Load games data
 void load_games(const std::string& filename, std::vector<Game>& games) {
     std::ifstream file(filename);
     std::string line;
     getline(file, line); // Skip header
+    int line_number = 1; // to track the line number for debugging
+
     while (getline(file, line)) {
-        auto tokens = split(line, ',');
-        Game game;
-        game.date = tokens[0]; // Assuming date is at index 0
-        game.season = std::stoi(tokens[5]); // Assuming season is at index 5
-        game.home_team_id = tokens[3]; // Assuming home_team_id is at index 3
-        game.visitor_team_id = tokens[4]; // Assuming visitor_team_id is at index 4
-        game.pts_home = std::stoi(tokens[6]); // Assuming pts_home is at index 6
-        game.pts_away = std::stoi(tokens[14]); // Assuming pts_away is at index 14
-        games.push_back(game);
+        line_number++; // Increment line number with each read
+        try {
+            auto tokens = split(line, ',');
+            Game game;
+            game.date = tokens[0]; // Check if this is the correct index
+            game.season = std::stoi(tokens[5]); // Check if this is the correct index
+            game.home_team_id = tokens[3]; // Check if this is the correct index
+            game.visitor_team_id = tokens[4]; // Check if this is the correct index
+            game.pts_home = std::stoi(tokens[6]); // Check if this is the correct index
+            game.pts_away = std::stoi(tokens[14]); // Check if this is the correct index
+            games.push_back(game);
+        } catch (const std::invalid_argument& e) {
+            std::cerr << "Invalid argument on line " << line_number << ": " << line << std::endl;
+            std::cerr << "Exception message: " << e.what() << std::endl;
+            // Optionally, continue with the next iteration instead of aborting
+            // continue;
+        }
     }
 }
 
-/*
+
+
+
 int main() {
     std::unordered_map<std::string, Team> teams;
     std::vector<Game> games;
@@ -87,4 +98,4 @@ int main() {
 
     return 0;
 }
-*/
+
