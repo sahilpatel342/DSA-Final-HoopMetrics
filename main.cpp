@@ -58,6 +58,8 @@ int main() {
     std::unordered_map<std::string, Team> teams;
     std::vector<Game> games;
 
+    std::vector<string> regular_season_list;
+
     load_teams("teams.csv", teams);
     //load_games("games.csv", games);
 
@@ -77,7 +79,7 @@ int main() {
      */
 
 
-    /*
+
     sf::RenderWindow window(sf::VideoMode(800, 800), "DSA FINAL");
 
     sf::Font font;
@@ -90,12 +92,10 @@ int main() {
 
     while (window.isOpen()) {
 
-        buttons.emplace_back(50, 670, 200, 50, font, "Button 1");
+        buttons.emplace_back(50, 670, 200, 50, font, "Regular Season");
         buttons.emplace_back(300, 670, 200, 50, font, "Button 2");
         buttons.emplace_back(550, 670, 200, 50, font, "Button 3");
-        buttons.emplace_back(50, 735, 200, 50, font, "Button 4");
-        buttons.emplace_back(300, 735, 200, 50, font, "Button 5");
-        buttons.emplace_back(550, 735, 200, 50, font, "Button 6");
+        buttons.emplace_back(300, 735, 200, 50, font, "Button 4");
         buttons.emplace_back(25, 500, 250, 150, font, "TOP 5:\n1. Orlando Magic\n2. LA Lakers\n3. Miami Heat\n4. LA Lakers\n5. Orlando Magic");
         buttons.emplace_back(525, 500, 250, 150, font, "BOTTOM 5");
         buttons.emplace_back(150, 30, 500, 50, font, "PLEASE SELECT AN OPTION FROM DOWN BELOW");
@@ -118,7 +118,9 @@ int main() {
                     for (auto& button : buttons) {
                         if (button.isMouseOver(window)) {
                             std::cout << "Button clicked: " << button.text.getString().toAnsiString() << std::endl;
-                            buttons.emplace_back(x, y, 17, 25,font,"", "pin.png");
+                            if (button.text.getString().toAnsiString() == "Regular Season") {
+
+                            }
                         }
                     }
                 }
@@ -132,7 +134,7 @@ int main() {
         window.display();
         buttons.clear();
     }
-     */
+
 
     return 0;
 }

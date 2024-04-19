@@ -66,6 +66,8 @@ void load_games(const std::string& filename, std::vector<Game>& games) {
     }
 }
 
+
+
 /*
 int main() {
     std::unordered_map<std::string, Team> teams;
