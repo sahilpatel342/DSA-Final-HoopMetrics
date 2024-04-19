@@ -59,7 +59,7 @@ int main() {
     std::vector<Game> games;
 
     load_teams("teams.csv", teams);
-    load_games("games.csv", games);
+    //load_games("games.csv", games);
 
     //cout << games[0].home_team_id << endl;
 
