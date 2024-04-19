@@ -103,6 +103,7 @@ int main() {
             buttons.emplace_back(525, 500, 250, 150, font, "BOTTOM 5:\n1. " + regular_season_list_min[0] + "\n2. " + regular_season_list_min[1] + "\n3. " + regular_season_list_min[2] + "\n4. " + regular_season_list_min[3] + "\n5. " + regular_season_list_min[4]);
             buttons.emplace_back(150, 30, 500, 50, font, "PLEASE SELECT AN OPTION FROM DOWN BELOW");
             buttons.emplace_back(300, 525, 200, 100, font, "Merge Sort:\nSelection Sort:");
+            buttons.emplace_back(0, 660, 800, 1, font, "");
 
             buttons.emplace_back(80, 100, 640, 390,font,"bruh", "map.png");
         }
