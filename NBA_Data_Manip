@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <queue>
+#include <functional>
 
 using namespace std;
 
@@ -20,7 +22,17 @@ struct Game {
     std::string visitor_team_id;
     int pts_home;
     int pts_away;
+    float fg_pct_home;
+    float ft_pct_home;
     // Additional game stats
+};
+
+struct TeamStats {
+    int wins = 0;
+    float total_fg_pct = 0;
+    float total_ft_pct = 0;
+    int point_differential = 0;
+    int games_count = 0;
 };
 
 // Helper function to split string by delimiter
@@ -33,6 +45,7 @@ std::vector<std::string> split(const std::string& s, char delimiter) {
     }
     return tokens;
 }
+
 
 // Load teams data
 void load_teams(const std::string& filename, std::unordered_map<std::string, Team>& teams) {
@@ -52,51 +65,114 @@ void load_games(const std::string& filename, std::vector<Game>& games) {
     std::ifstream file(filename);
     std::string line;
     getline(file, line); // Skip header
-    int line_number = 1; // to track the line number for debugging
-
     while (getline(file, line)) {
-        line_number++; // Increment line number with each read
         try {
             auto tokens = split(line, ',');
             Game game;
-            game.date = tokens[0]; // Check if this is the correct index
-            game.season = std::stoi(tokens[5]); // Check if this is the correct index
-            game.home_team_id = tokens[3]; // Check if this is the correct index
-            game.visitor_team_id = tokens[4]; // Check if this is the correct index
-            game.pts_home = std::stoi(tokens[6]); // Check if this is the correct index
-            game.pts_away = std::stoi(tokens[14]); // Check if this is the correct index
+            game.date = tokens[0];
+            game.season = stoi(tokens[5]);
+            game.home_team_id = tokens[3];
+            game.visitor_team_id = tokens[4];
+            game.pts_home = stoi(tokens[6]);
+            game.pts_away = stoi(tokens[7]);
+            game.fg_pct_home = stof(tokens[8]);
+            game.ft_pct_home = stof(tokens[9]);
             games.push_back(game);
-        } catch (const std::invalid_argument& e) {
-            std::cerr << "Invalid argument on line " << line_number << ": " << line << std::endl;
-            std::cerr << "Exception message: " << e.what() << std::endl;
-            // Optionally, continue with the next iteration instead of aborting
-            // continue;
+
+            cout << "Loaded FG%: " << game.fg_pct_home << endl; // Debugging line
+        } catch (const std::exception& e) {
+            cerr << "Error processing line: " << line << endl;
+            cerr << "Exception: " << e.what() << endl;
         }
     }
 }
 
+void merge(vector<pair<string, float>>& left, vector<pair<string, float>>& right, vector<pair<string, float>>& bars) {
+    int nL = left.size();
+    int nR = right.size();
+    int i = 0, j = 0, k = 0;
 
-
-/*
-int main() {
-    std::unordered_map<std::string, Team> teams;
-    std::vector<Game> games;
-
-    load_teams("teams.csv", teams);
-    load_games("games.csv", games);
-
-    for (auto i = teams.begin(); i != teams.end(); i++) {
-        std::cout << i->first << "-" << i->second.team_name << endl;
+    while (j < nL && k < nR) {
+        if (left[j].second > right[k].second) {
+            bars[i] = left[j];
+            j++;
+        } else {
+            bars[i] = right[k];
+            k++;
+        }
+        i++;
     }
-
-    cout << "\n\n\n\n" << endl;
-
-    for (auto j : games) {
-        std::cout << j.pts_away << endl;
+    while (j < nL) {
+        bars[i] = left[j];
+        j++; i++;
     }
-    // Further processing, merging, and analysis logic here
-
-    return 0;
+    while (k < nR) {
+        bars[i] = right[k];
+        k++; i++;
+    }
 }
 
-*/
+void mergeSort(vector<pair<string, float>>& bar) {
+    if (bar.size() <= 1) return;
+
+    int mid = bar.size() / 2;
+    vector<pair<string, float>> left;
+    vector<pair<string, float>> right;
+
+    for (int j = 0; j < mid; j++)
+        left.push_back(bar[j]);
+    for (int j = 0; j < (bar.size() - mid); j++)
+        right.push_back(bar[mid + j]);
+
+    mergeSort(left);
+    mergeSort(right);
+    merge(left, right, bar);
+}
+
+void computeAndSortMetrics(const vector<Game>& games) {
+    unordered_map<string, TeamStats> stats;
+
+    for (const auto& game : games) {
+        auto& team = stats[game.home_team_id];
+        team.wins += (game.pts_home > game.pts_away);
+        team.total_fg_pct += game.fg_pct_home; // Summing up
+        team.total_ft_pct += game.ft_pct_home;
+        team.point_differential += (game.pts_home - game.pts_away);
+        team.games_count++;
+    }
+
+    // Sort and print best and worst by FG%
+    vector<pair<string, float>> fg_pct_list;
+    for (const auto& stat : stats) {
+        if (stat.second.games_count > 0) {
+            fg_pct_list.push_back({stat.first, stat.second.total_fg_pct / stat.second.games_count});
+            cout << "Team ID: " << stat.first << " - Average FG%: " << stat.second.total_fg_pct / stat.second.games_count << endl; // Debugging line
+        }
+    }
+
+    mergeSort(fg_pct_list);
+    cout << "Best Home Court FG%:" << endl;
+    for (auto& team : fg_pct_list) {
+        cout << "Team ID: " << team.first << " - FG%: " << team.second << endl;
+    }
+
+    // Using Min Heap for worst FG%
+    priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>> min_heap;
+    for (auto& team : fg_pct_list) {
+        min_heap.push({team.second, team.first});
+    }
+
+    cout << "Worst Home Court FG%:" << endl;
+    while (!min_heap.empty()) {
+        auto team = min_heap.top();
+        min_heap.pop();
+        cout << "Team ID: " << team.second << " - FG%: " << team.first << endl;
+    }
+}
+
+int main() {
+    vector<Game> games;
+    load_games("games.csv", games);
+    computeAndSortMetrics(games);
+    return 0;
+}
