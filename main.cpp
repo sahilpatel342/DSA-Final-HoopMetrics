@@ -107,6 +107,9 @@ int main() {
     std::unordered_map<std::string, Team> teams;
     std::vector<Game> games;
 
+    load_teams("teams.csv", teams);
+    load_games("games.csv", games);
+
     std::vector<string> regular_season_list_merge = {"Magic", "Heat", "Warriors", "Lakers", "Pacers"};
     std::vector<string> regular_season_list_min = {"Hornets", "Pistons", "Wizards", "Warriors", "Jazz"};
 
@@ -120,12 +123,6 @@ int main() {
     std::vector<string> FGP_list_min = {"Trail Blazers", "Bulls", "Wizards", "Warriors", "76ers"};
 
     string currentSelection = "Regular Season Wins";
-
-    load_teams("teams.csv", teams);
-    //load_games("games.csv", games);
-
-    //cout << games[0].home_team_id << endl;
-
 
     for (auto i = teams.begin(); i != teams.end(); i++) {
         cout << i->first << "-" << i->second.team_name << endl;
@@ -164,7 +161,7 @@ int main() {
             buttons.emplace_back(525, 500, 250, 150, font, "BOTTOM 5:\n1. " + FGP_list_min[0] + "\n2. " + FGP_list_min[1] + "\n3. " + FGP_list_min[2] + "\n4. " + FGP_list_min[3] + "\n5. " + FGP_list_min[4]);
             buttons.emplace_back(150, 30, 500, 50, font, "PLEASE SELECT AN OPTION FROM DOWN BELOW");
             buttons.emplace_back(300, 525, 200, 100, font, "Merge Sort:\nSelection Sort:");
-
+            buttons.emplace_back(0, 660, 800, 1, font, "");
             buttons.emplace_back(80, 100, 640, 390,font,"bruh", "map.png");
         }
         else if (currentSelection == "Point Differential") {
@@ -176,7 +173,7 @@ int main() {
             buttons.emplace_back(525, 500, 250, 150, font, "BOTTOM 5:\n1. " + PD_list_min[0] + "\n2. " + PD_list_min[1] + "\n3. " + PD_list_min[2] + "\n4. " + PD_list_min[3] + "\n5. " + PD_list_min[4]);
             buttons.emplace_back(150, 30, 500, 50, font, "PLEASE SELECT AN OPTION FROM DOWN BELOW");
             buttons.emplace_back(300, 525, 200, 100, font, "Merge Sort:\nSelection Sort:");
-
+            buttons.emplace_back(0, 660, 800, 1, font, "");
             buttons.emplace_back(80, 100, 640, 390,font,"bruh", "map.png");
         }
 
@@ -189,7 +186,7 @@ int main() {
             buttons.emplace_back(525, 500, 250, 150, font, "BOTTOM 5:\n1. " + FTP_list_min[0] + "\n2. " + FTP_list_min[1] + "\n3. " + FTP_list_min[2] + "\n4. " + FTP_list_min[3] + "\n5. " + FTP_list_min[4]);
             buttons.emplace_back(150, 30, 500, 50, font, "PLEASE SELECT AN OPTION FROM DOWN BELOW");
             buttons.emplace_back(300, 525, 200, 100, font, "Merge Sort:\nSelection Sort:");
-
+            buttons.emplace_back(0, 660, 800, 1, font, "");
             buttons.emplace_back(80, 100, 640, 390,font,"bruh", "map.png");
         }
 
@@ -243,8 +240,8 @@ int main() {
             circle1.setFillColor(colorGreen);
             circle2.setFillColor(colorGreen);
             circle3.setFillColor(colorGreen);
-            circle4.setFillColor(colorYellow);
-            circle5.setFillColor(colorYellow);
+            circle4.setFillColor(colorGreen);
+            circle5.setFillColor(colorGreen);
 
             // Set the position of the circle (x, y) coordinates
             vector<int> coordinates1 = get_team_coordinates(regular_season_list_merge[0]);
@@ -275,8 +272,8 @@ int main() {
             sf::CircleShape circle10(15);
 
             // Set the fill color of the circle to blue
-            circle6.setFillColor(colorYellow);
-            circle7.setFillColor(colorYellow);
+            circle6.setFillColor(sf::Color::Red);
+            circle7.setFillColor(sf::Color::Red);
             circle8.setFillColor(sf::Color::Red);
             circle9.setFillColor(sf::Color::Red);
             circle10.setFillColor(sf::Color::Red);
@@ -313,8 +310,8 @@ int main() {
             circle1.setFillColor(colorGreen);
             circle2.setFillColor(colorGreen);
             circle3.setFillColor(colorGreen);
-            circle4.setFillColor(colorYellow);
-            circle5.setFillColor(colorYellow);
+            circle4.setFillColor(colorGreen);
+            circle5.setFillColor(colorGreen);
 
             // Set the position of the circle (x, y) coordinates
             vector<int> coordinates1 = get_team_coordinates(FGP_list_merge[0]);
@@ -345,8 +342,8 @@ int main() {
             sf::CircleShape circle10(15);
 
             // Set the fill color of the circle to blue
-            circle6.setFillColor(colorYellow);
-            circle7.setFillColor(colorYellow);
+            circle6.setFillColor(sf::Color::Red);
+            circle7.setFillColor(sf::Color::Red);
             circle8.setFillColor(sf::Color::Red);
             circle9.setFillColor(sf::Color::Red);
             circle10.setFillColor(sf::Color::Red);
@@ -383,8 +380,8 @@ int main() {
             circle1.setFillColor(colorGreen);
             circle2.setFillColor(colorGreen);
             circle3.setFillColor(colorGreen);
-            circle4.setFillColor(colorYellow);
-            circle5.setFillColor(colorYellow);
+            circle4.setFillColor(colorGreen);
+            circle5.setFillColor(colorGreen);
 
             // Set the position of the circle (x, y) coordinates
             vector<int> coordinates1 = get_team_coordinates(PD_list_merge[0]);
@@ -415,8 +412,8 @@ int main() {
             sf::CircleShape circle10(15);
 
             // Set the fill color of the circle to blue
-            circle6.setFillColor(colorYellow);
-            circle7.setFillColor(colorYellow);
+            circle6.setFillColor(sf::Color::Red);
+            circle7.setFillColor(sf::Color::Red);
             circle8.setFillColor(sf::Color::Red);
             circle9.setFillColor(sf::Color::Red);
             circle10.setFillColor(sf::Color::Red);
@@ -453,8 +450,8 @@ int main() {
             circle1.setFillColor(colorGreen);
             circle2.setFillColor(colorGreen);
             circle3.setFillColor(colorGreen);
-            circle4.setFillColor(colorYellow);
-            circle5.setFillColor(colorYellow);
+            circle4.setFillColor(colorGreen);
+            circle5.setFillColor(colorGreen);
 
             // Set the position of the circle (x, y) coordinates
             vector<int> coordinates1 = get_team_coordinates(FTP_list_merge[0]);
@@ -485,8 +482,8 @@ int main() {
             sf::CircleShape circle10(15);
 
             // Set the fill color of the circle to blue
-            circle6.setFillColor(colorYellow);
-            circle7.setFillColor(colorYellow);
+            circle6.setFillColor(sf::Color::Red);
+            circle7.setFillColor(sf::Color::Red);
             circle8.setFillColor(sf::Color::Red);
             circle9.setFillColor(sf::Color::Red);
             circle10.setFillColor(sf::Color::Red);
