@@ -53,6 +53,55 @@ public:
     sf::Text text;
 };
 
+// Function to get the coordinates of a specified team
+vector<int> get_team_coordinates(const string& team_name) {
+    // Map storing the team names as keys and their corresponding coordinates as values
+    map<string, pair<int, int>> team_coordinates = {
+            {"Trail Blazers", {111, 131}},
+            {"Warriors", {98, 236}},
+            {"Kings", {106, 220}},
+            {"Clippers", {124, 291}},
+            {"Lakers", {115, 275}},
+            {"Suns", {204, 321}},
+            {"Jazz", {216, 221}},
+            {"Nuggets", {307, 245}},
+            {"Thunder", {379, 306}},
+            {"Timberwolves", {407, 149}},
+            {"Bucks", {485, 197}},
+            {"Bulls", {484, 211}},
+            {"Pacers", {507, 248}},
+            {"Pistons", {536, 197}},
+            {"Cavs", {555, 206}},
+            {"Raptors", {578, 175}},
+            {"Mavericks", {384, 344}},
+            {"Spurs", {360, 385}},
+            {"Rockets", {410, 388}},
+            {"Pelicans", {473, 377}},
+            {"Grizzlies", {476, 303}},
+            {"Hawks", {536, 316}},
+            {"Magic", {595, 389}},
+            {"Heat", {613, 410}},
+            {"Hornets", {587, 298}},
+            {"Wizards", {625, 239}},
+            {"76ers", {644, 222}},
+            {"Nets", {664, 205}},
+            {"Knicks", {651, 202}},
+            {"Celtics", {676, 184}}
+    };
+
+    // Find the coordinates for the specified team
+    auto it = team_coordinates.find(team_name);
+
+    // If the team is found, return the coordinates as a vector
+    if (it != team_coordinates.end()) {
+        return {it->second.first, it->second.second};
+    } else {
+        // If the team is not found, return an empty vector
+        return {};
+    }
+}
+
+
 int main() {
 
     std::unordered_map<std::string, Team> teams;
@@ -104,7 +153,6 @@ int main() {
             buttons.emplace_back(150, 30, 500, 50, font, "PLEASE SELECT AN OPTION FROM DOWN BELOW");
             buttons.emplace_back(300, 525, 200, 100, font, "Merge Sort:\nSelection Sort:");
             buttons.emplace_back(0, 660, 800, 1, font, "");
-
             buttons.emplace_back(80, 100, 640, 390,font,"bruh", "map.png");
         }
         else if (currentSelection == "Field Goal Percentage") {
@@ -177,10 +225,292 @@ int main() {
                 }
             }
         }
-        sf::Color color(151, 151, 151);
-        window.clear(color);
+        sf::Color colorGray(151, 151, 151);
+        sf::Color colorGreen(56, 206, 0);
+        sf::Color colorYellow(240, 232, 0);
+        window.clear(colorGray);
         for (auto& button : buttons) {
             button.draw(window);
+        }
+        if (currentSelection == "Regular Season Wins") {
+            sf::CircleShape circle1(15);
+            sf::CircleShape circle2(15);
+            sf::CircleShape circle3(15);
+            sf::CircleShape circle4(15);
+            sf::CircleShape circle5(15);
+
+            // Set the fill color of the circle to blue
+            circle1.setFillColor(colorGreen);
+            circle2.setFillColor(colorGreen);
+            circle3.setFillColor(colorGreen);
+            circle4.setFillColor(colorYellow);
+            circle5.setFillColor(colorYellow);
+
+            // Set the position of the circle (x, y) coordinates
+            vector<int> coordinates1 = get_team_coordinates(regular_season_list_merge[0]);
+            circle1.setPosition(coordinates1[0], coordinates1[1]);
+            window.draw(circle1);
+
+            vector<int> coordinates2 = get_team_coordinates(regular_season_list_merge[1]);
+            circle2.setPosition(coordinates2[0], coordinates2[1]);
+            window.draw(circle2);
+
+            vector<int> coordinates3 = get_team_coordinates(regular_season_list_merge[2]);
+            circle3.setPosition(coordinates3[0], coordinates3[1]);
+            window.draw(circle3);
+
+            vector<int> coordinates4 = get_team_coordinates(regular_season_list_merge[3]);
+            circle4.setPosition(coordinates4[0], coordinates4[1]);
+            window.draw(circle4);
+
+            vector<int> coordinates5 = get_team_coordinates(regular_season_list_merge[4]);
+            circle5.setPosition(coordinates5[0], coordinates5[1]);
+            window.draw(circle5);
+
+
+            sf::CircleShape circle6(15);
+            sf::CircleShape circle7(15);
+            sf::CircleShape circle8(15);
+            sf::CircleShape circle9(15);
+            sf::CircleShape circle10(15);
+
+            // Set the fill color of the circle to blue
+            circle6.setFillColor(colorYellow);
+            circle7.setFillColor(colorYellow);
+            circle8.setFillColor(sf::Color::Red);
+            circle9.setFillColor(sf::Color::Red);
+            circle10.setFillColor(sf::Color::Red);
+
+            // Set the position of the circle (x, y) coordinates
+            vector<int> coordinates6 = get_team_coordinates(regular_season_list_min[0]);
+            circle6.setPosition(coordinates6[0], coordinates6[1]);
+            window.draw(circle6);
+
+            vector<int> coordinates7 = get_team_coordinates(regular_season_list_min[1]);
+            circle7.setPosition(coordinates7[0], coordinates7[1]);
+            window.draw(circle7);
+
+            vector<int> coordinates8 = get_team_coordinates(regular_season_list_min[2]);
+            circle8.setPosition(coordinates8[0], coordinates8[1]);
+            window.draw(circle8);
+
+            vector<int> coordinates9 = get_team_coordinates(regular_season_list_min[3]);
+            circle9.setPosition(coordinates9[0], coordinates9[1]);
+            window.draw(circle9);
+
+            vector<int> coordinates10 = get_team_coordinates(regular_season_list_min[4]);
+            circle10.setPosition(coordinates10[0], coordinates10[1]);
+            window.draw(circle10);
+        }
+        else if (currentSelection == "Field Goal Percentage") {
+            sf::CircleShape circle1(15);
+            sf::CircleShape circle2(15);
+            sf::CircleShape circle3(15);
+            sf::CircleShape circle4(15);
+            sf::CircleShape circle5(15);
+
+            // Set the fill color of the circle to blue
+            circle1.setFillColor(colorGreen);
+            circle2.setFillColor(colorGreen);
+            circle3.setFillColor(colorGreen);
+            circle4.setFillColor(colorYellow);
+            circle5.setFillColor(colorYellow);
+
+            // Set the position of the circle (x, y) coordinates
+            vector<int> coordinates1 = get_team_coordinates(FGP_list_merge[0]);
+            circle1.setPosition(coordinates1[0], coordinates1[1]);
+            window.draw(circle1);
+
+            vector<int> coordinates2 = get_team_coordinates(FGP_list_merge[1]);
+            circle2.setPosition(coordinates2[0], coordinates2[1]);
+            window.draw(circle2);
+
+            vector<int> coordinates3 = get_team_coordinates(FGP_list_merge[2]);
+            circle3.setPosition(coordinates3[0], coordinates3[1]);
+            window.draw(circle3);
+
+            vector<int> coordinates4 = get_team_coordinates(FGP_list_merge[3]);
+            circle4.setPosition(coordinates4[0], coordinates4[1]);
+            window.draw(circle4);
+
+            vector<int> coordinates5 = get_team_coordinates(FGP_list_merge[4]);
+            circle5.setPosition(coordinates5[0], coordinates5[1]);
+            window.draw(circle5);
+
+
+            sf::CircleShape circle6(15);
+            sf::CircleShape circle7(15);
+            sf::CircleShape circle8(15);
+            sf::CircleShape circle9(15);
+            sf::CircleShape circle10(15);
+
+            // Set the fill color of the circle to blue
+            circle6.setFillColor(colorYellow);
+            circle7.setFillColor(colorYellow);
+            circle8.setFillColor(sf::Color::Red);
+            circle9.setFillColor(sf::Color::Red);
+            circle10.setFillColor(sf::Color::Red);
+
+            // Set the position of the circle (x, y) coordinates
+            vector<int> coordinates6 = get_team_coordinates(FGP_list_min[0]);
+            circle6.setPosition(coordinates6[0], coordinates6[1]);
+            window.draw(circle6);
+
+            vector<int> coordinates7 = get_team_coordinates(FGP_list_min[1]);
+            circle7.setPosition(coordinates7[0], coordinates7[1]);
+            window.draw(circle7);
+
+            vector<int> coordinates8 = get_team_coordinates(FGP_list_min[2]);
+            circle8.setPosition(coordinates8[0], coordinates8[1]);
+            window.draw(circle8);
+
+            vector<int> coordinates9 = get_team_coordinates(FGP_list_min[3]);
+            circle9.setPosition(coordinates9[0], coordinates9[1]);
+            window.draw(circle9);
+
+            vector<int> coordinates10 = get_team_coordinates(FGP_list_min[4]);
+            circle10.setPosition(coordinates10[0], coordinates10[1]);
+            window.draw(circle10);
+        }
+        else if (currentSelection == "Point Differential") {
+            sf::CircleShape circle1(15);
+            sf::CircleShape circle2(15);
+            sf::CircleShape circle3(15);
+            sf::CircleShape circle4(15);
+            sf::CircleShape circle5(15);
+
+            // Set the fill color of the circle to blue
+            circle1.setFillColor(colorGreen);
+            circle2.setFillColor(colorGreen);
+            circle3.setFillColor(colorGreen);
+            circle4.setFillColor(colorYellow);
+            circle5.setFillColor(colorYellow);
+
+            // Set the position of the circle (x, y) coordinates
+            vector<int> coordinates1 = get_team_coordinates(PD_list_merge[0]);
+            circle1.setPosition(coordinates1[0], coordinates1[1]);
+            window.draw(circle1);
+
+            vector<int> coordinates2 = get_team_coordinates(PD_list_merge[1]);
+            circle2.setPosition(coordinates2[0], coordinates2[1]);
+            window.draw(circle2);
+
+            vector<int> coordinates3 = get_team_coordinates(PD_list_merge[2]);
+            circle3.setPosition(coordinates3[0], coordinates3[1]);
+            window.draw(circle3);
+
+            vector<int> coordinates4 = get_team_coordinates(PD_list_merge[3]);
+            circle4.setPosition(coordinates4[0], coordinates4[1]);
+            window.draw(circle4);
+
+            vector<int> coordinates5 = get_team_coordinates(PD_list_merge[4]);
+            circle5.setPosition(coordinates5[0], coordinates5[1]);
+            window.draw(circle5);
+
+
+            sf::CircleShape circle6(15);
+            sf::CircleShape circle7(15);
+            sf::CircleShape circle8(15);
+            sf::CircleShape circle9(15);
+            sf::CircleShape circle10(15);
+
+            // Set the fill color of the circle to blue
+            circle6.setFillColor(colorYellow);
+            circle7.setFillColor(colorYellow);
+            circle8.setFillColor(sf::Color::Red);
+            circle9.setFillColor(sf::Color::Red);
+            circle10.setFillColor(sf::Color::Red);
+
+            // Set the position of the circle (x, y) coordinates
+            vector<int> coordinates6 = get_team_coordinates(PD_list_min[0]);
+            circle6.setPosition(coordinates6[0], coordinates6[1]);
+            window.draw(circle6);
+
+            vector<int> coordinates7 = get_team_coordinates(PD_list_min[1]);
+            circle7.setPosition(coordinates7[0], coordinates7[1]);
+            window.draw(circle7);
+
+            vector<int> coordinates8 = get_team_coordinates(PD_list_min[2]);
+            circle8.setPosition(coordinates8[0], coordinates8[1]);
+            window.draw(circle8);
+
+            vector<int> coordinates9 = get_team_coordinates(PD_list_min[3]);
+            circle9.setPosition(coordinates9[0], coordinates9[1]);
+            window.draw(circle9);
+
+            vector<int> coordinates10 = get_team_coordinates(PD_list_min[4]);
+            circle10.setPosition(coordinates10[0], coordinates10[1]);
+            window.draw(circle10);
+        }
+        else if (currentSelection == "Free Throw Percentage") {
+            sf::CircleShape circle1(15);
+            sf::CircleShape circle2(15);
+            sf::CircleShape circle3(15);
+            sf::CircleShape circle4(15);
+            sf::CircleShape circle5(15);
+
+            // Set the fill color of the circle to blue
+            circle1.setFillColor(colorGreen);
+            circle2.setFillColor(colorGreen);
+            circle3.setFillColor(colorGreen);
+            circle4.setFillColor(colorYellow);
+            circle5.setFillColor(colorYellow);
+
+            // Set the position of the circle (x, y) coordinates
+            vector<int> coordinates1 = get_team_coordinates(FTP_list_merge[0]);
+            circle1.setPosition(coordinates1[0], coordinates1[1]);
+            window.draw(circle1);
+
+            vector<int> coordinates2 = get_team_coordinates(FTP_list_merge[1]);
+            circle2.setPosition(coordinates2[0], coordinates2[1]);
+            window.draw(circle2);
+
+            vector<int> coordinates3 = get_team_coordinates(FTP_list_merge[2]);
+            circle3.setPosition(coordinates3[0], coordinates3[1]);
+            window.draw(circle3);
+
+            vector<int> coordinates4 = get_team_coordinates(FTP_list_merge[3]);
+            circle4.setPosition(coordinates4[0], coordinates4[1]);
+            window.draw(circle4);
+
+            vector<int> coordinates5 = get_team_coordinates(FTP_list_merge[4]);
+            circle5.setPosition(coordinates5[0], coordinates5[1]);
+            window.draw(circle5);
+
+
+            sf::CircleShape circle6(15);
+            sf::CircleShape circle7(15);
+            sf::CircleShape circle8(15);
+            sf::CircleShape circle9(15);
+            sf::CircleShape circle10(15);
+
+            // Set the fill color of the circle to blue
+            circle6.setFillColor(colorYellow);
+            circle7.setFillColor(colorYellow);
+            circle8.setFillColor(sf::Color::Red);
+            circle9.setFillColor(sf::Color::Red);
+            circle10.setFillColor(sf::Color::Red);
+
+            // Set the position of the circle (x, y) coordinates
+            vector<int> coordinates6 = get_team_coordinates(FTP_list_min[0]);
+            circle6.setPosition(coordinates6[0], coordinates6[1]);
+            window.draw(circle6);
+
+            vector<int> coordinates7 = get_team_coordinates(FTP_list_min[1]);
+            circle7.setPosition(coordinates7[0], coordinates7[1]);
+            window.draw(circle7);
+
+            vector<int> coordinates8 = get_team_coordinates(FTP_list_min[2]);
+            circle8.setPosition(coordinates8[0], coordinates8[1]);
+            window.draw(circle8);
+
+            vector<int> coordinates9 = get_team_coordinates(FTP_list_min[3]);
+            circle9.setPosition(coordinates9[0], coordinates9[1]);
+            window.draw(circle9);
+
+            vector<int> coordinates10 = get_team_coordinates(FTP_list_min[4]);
+            circle10.setPosition(coordinates10[0], coordinates10[1]);
+            window.draw(circle10);
         }
         window.display();
         buttons.clear();

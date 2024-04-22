@@ -319,9 +319,11 @@ void computeAndSortMetrics(const vector<Game>& games) {
 }
 
 // Main function
+/*
 int main() {
     vector<Game> games;
     load_games("games.csv", games);
     computeAndSortMetrics(games);
     return 0;
 }
+ */
