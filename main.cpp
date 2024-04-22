@@ -71,7 +71,7 @@ vector<int> get_team_coordinates(const string& team_name) {
             {"Bulls", {484, 211}},
             {"Pacers", {507, 248}},
             {"Pistons", {536, 197}},
-            {"Cavs", {555, 206}},
+            {"Cavaliers", {555, 206}},
             {"Raptors", {578, 175}},
             {"Mavericks", {384, 344}},
             {"Spurs", {360, 385}},
@@ -101,6 +101,50 @@ vector<int> get_team_coordinates(const string& team_name) {
     }
 }
 
+std::string get_team_name(const std::string& team_id) {
+    // Create an unordered_map to map team IDs (as strings) to team names
+    std::unordered_map<std::string, std::string> team_map = {
+            {"1610612739", "Cavaliers"},
+            {"1610612766", "Hornets"},
+            {"1610612765", "Pistons"},
+            {"1610612764", "Wizards"},
+            {"1610612744", "Warriors"},
+            {"1610612762", "Jazz"},
+            {"1610612737", "Hawks"},
+            {"1610612760", "Thunder"},
+            {"1610612745", "Rockets"},
+            {"1610612759", "Spurs"},
+            {"1610612754", "Pacers"},
+            {"1610612756", "Suns"},
+            {"1610612753", "Magic"},
+            {"1610612752", "Knicks"},
+            {"1610612751", "Nets"},
+            {"1610612750", "Timberwolves"},
+            {"1610612742", "Mavericks"},
+            {"1610612749", "Bucks"},
+            {"1610612748", "Heat"},
+            {"1610612746", "Clippers"},
+            {"1610612740", "Pelicans"},
+            {"1610612747", "Lakers"},
+            {"1610612761", "Raptors"},
+            {"1610612738", "Celtics"},
+            {"1610612743", "Nuggets"},
+            {"1610612755", "76ers"},
+            {"1610612763", "Grizzlies"},
+            {"1610612758", "Kings"},
+            {"1610612757", "Trail Blazers"},
+            {"1610612741", "Bulls"}
+    };
+
+    // Check if the team_id is in the map and return the corresponding team name
+    auto it = team_map.find(team_id);
+    if (it != team_map.end()) {
+        return it->second;
+    } else {
+        return "Team ID not found";
+    }
+}
+
 
 int main() {
 
@@ -110,19 +154,23 @@ int main() {
     load_teams("teams.csv", teams);
     load_games("games.csv", games);
 
+    for (auto i = teams.begin(); i != teams.end(); i++) {
+        cout << i->first << "-" << i->second.team_name << endl;
+    }
+
     std::vector<string> FGP_list_merge;
     std::vector<string> FGP_list_min;
     string FGP_merge_time;
     string FGP_min_time;
     vector<pair<string, float>> FGP_data = computeAndSortFG(games);
     for (int i = 0; i < 5; i++) {
-        FGP_list_merge[i] = FGP_data[i].first;
+        FGP_list_merge.push_back(get_team_name(FGP_data[i].first));
     }
     for (int i = 5; i < 10; i++) {
-        FGP_list_merge[i] = FGP_data[i].first;
+        FGP_list_min.push_back(get_team_name(FGP_data[i].first));
     }
-    FGP_merge_time = FGP_data[10].second;
-    FGP_min_time = FGP_data[10].second;
+    FGP_merge_time = to_string(FGP_data[10].second);
+    FGP_min_time = to_string(FGP_data[11].second);
 
     std::vector<string> regular_season_list_merge;
     std::vector<string> regular_season_list_min;
@@ -130,27 +178,27 @@ int main() {
     string regular_season_min_time;
     vector<pair<string, float>> regular_season_data = computeAndSortWins(games);
     for (int i = 0; i < 5; i++) {
-        FGP_list_merge[i] = regular_season_data[i].first;
+        regular_season_list_merge.push_back(get_team_name(regular_season_data[i].first));
     }
     for (int i = 5; i < 10; i++) {
-        FGP_list_merge[i] = regular_season_data[i].first;
+        regular_season_list_min.push_back(get_team_name(regular_season_data[i].first));
     }
-    FGP_merge_time = regular_season_data[10].second;
-    FGP_min_time = regular_season_data[10].second;
+    regular_season_merge_time = to_string(regular_season_data[10].second);
+    regular_season_min_time = to_string(regular_season_data[11].second);
 
     std::vector<string> FTP_list_merge;
     std::vector<string> FTP_list_min;
     string FTP_merge_time;
     string FTP_min_time;
-    vector<pair<string, float>> FTP_data = computeAndSortFG(games);
+    vector<pair<string, float>> FTP_data = computeAndSortFT(games);
     for (int i = 0; i < 5; i++) {
-        FGP_list_merge[i] = FTP_data[i].first;
+        FTP_list_merge.push_back(get_team_name(FTP_data[i].first));
     }
     for (int i = 5; i < 10; i++) {
-        FGP_list_merge[i] = FTP_data[i].first;
+        FTP_list_min.push_back(get_team_name(FTP_data[i].first));
     }
-    FGP_merge_time = FTP_data[10].second;
-    FGP_min_time = FTP_data[10].second;
+    FTP_merge_time = to_string(FTP_data[10].second);
+    FTP_min_time = to_string(FTP_data[11].second);
 
     std::vector<string> PD_list_merge;
     std::vector<string> PD_list_min;
@@ -158,33 +206,15 @@ int main() {
     string PD_min_time;
     vector<pair<string, float>> PD_data = computeAndSortPointDiff(games);
     for (int i = 0; i < 5; i++) {
-        FGP_list_merge[i] = PD_data[i].first;
+        PD_list_merge.push_back(get_team_name(PD_data[i].first));
     }
     for (int i = 5; i < 10; i++) {
-        FGP_list_merge[i] = PD_data[i].first;
+        PD_list_min.push_back(get_team_name(PD_data[i].first));
     }
-    FGP_merge_time = PD_data[10].second;
-    FGP_min_time = PD_data[10].second;
-
-
-
-    //std::vector<string> regular_season_list_merge = {"Magic", "Heat", "Warriors", "Lakers", "Pacers"};
-    //std::vector<string> regular_season_list_min = {"Hornets", "Pistons", "Wizards", "Warriors", "Jazz"};
-
-    //std::vector<string> FTP_list_merge = {"Hawks", "Thunder", "Rockets", "Spurs", "Jazz"};
-    //std::vector<string> FTP_list_min = {"Suns", "Pistons", "Wizards", "Warriors", "Pelicans"};
-
-    //std::vector<string> PD_list_merge = {"Kings", "Pistons", "Wizards", "Celtics", "Jazz"};
-    //std::vector<string> PD_list_min = {"Raptors", "76ers", "Wizards", "Bucks", "Timberwolves"};
-
-    //std::vector<string> FGP_list_merge = {"Mavericks", "Pistons", "Knicks", "Warriors", "Jazz"};
-    //std::vector<string> FGP_list_min = {"Trail Blazers", "Bulls", "Wizards", "Warriors", "76ers"};
+    PD_merge_time = to_string(PD_data[10].second);
+    PD_min_time = to_string(PD_data[11].second);
 
     string currentSelection = "Regular Season Wins";
-
-    for (auto i = teams.begin(); i != teams.end(); i++) {
-        cout << i->first << "-" << i->second.team_name << endl;
-    }
 
     sf::RenderWindow window(sf::VideoMode(800, 800), "DSA FINAL");
 
@@ -203,10 +233,10 @@ int main() {
             buttons.emplace_back(75, 735, 275, 50, font, "Field Goal Percentage");
             buttons.emplace_back(450, 670, 275, 50, font, "Point Differential");
             buttons.emplace_back(450, 735, 275, 50, font, "Free Throw Percentage");
-            buttons.emplace_back(25, 500, 250, 150, font, "TOP 5:\n1. " + regular_season_list_merge[0] + "\n2. " + regular_season_list_merge[1] + "\n3. " + regular_season_list_merge[2] + "\n4. " + regular_season_list_merge[3] + "\n5. " + regular_season_list_merge[4]);
-            buttons.emplace_back(525, 500, 250, 150, font, "BOTTOM 5:\n1. " + regular_season_list_min[0] + "\n2. " + regular_season_list_min[1] + "\n3. " + regular_season_list_min[2] + "\n4. " + regular_season_list_min[3] + "\n5. " + regular_season_list_min[4]);
+            buttons.emplace_back(25, 500, 200, 150, font, "TOP 5:\n1. " + regular_season_list_merge[0] + "\n2. " + regular_season_list_merge[1] + "\n3. " + regular_season_list_merge[2] + "\n4. " + regular_season_list_merge[3] + "\n5. " + regular_season_list_merge[4]);
+            buttons.emplace_back(575, 500, 200, 150, font, "BOTTOM 5:\n1. " + regular_season_list_min[0] + "\n2. " + regular_season_list_min[1] + "\n3. " + regular_season_list_min[2] + "\n4. " + regular_season_list_min[3] + "\n5. " + regular_season_list_min[4]);
             buttons.emplace_back(150, 30, 500, 50, font, "PLEASE SELECT AN OPTION FROM DOWN BELOW");
-            buttons.emplace_back(300, 525, 200, 100, font, "Merge Sort: " + regular_season_merge_time + "\nMin Heap:" + regular_season_min_time);
+            buttons.emplace_back(250, 500, 300, 150, font, "Times(Nanoseconds):\n - Merge Sort(Top 5):\n     " + regular_season_merge_time + "\n - Min Heap(Bottom 5):\n     " + regular_season_min_time);
             buttons.emplace_back(0, 660, 800, 1, font, "");
             buttons.emplace_back(80, 100, 640, 390,font,"bruh", "map.png");
         }
@@ -215,10 +245,10 @@ int main() {
             buttons.emplace_back(75, 735, 275, 50, font, "Field Goal Percentage");
             buttons.emplace_back(450, 670, 275, 50, font, "Point Differential");
             buttons.emplace_back(450, 735, 275, 50, font, "Free Throw Percentage");
-            buttons.emplace_back(25, 500, 250, 150, font, "TOP 5:\n1. " + FGP_list_merge[0] + "\n2. " + FGP_list_merge[1] + "\n3. " + FGP_list_merge[2] + "\n4. " + FGP_list_merge[3] + "\n5. " + FGP_list_merge[4]);
-            buttons.emplace_back(525, 500, 250, 150, font, "BOTTOM 5:\n1. " + FGP_list_min[0] + "\n2. " + FGP_list_min[1] + "\n3. " + FGP_list_min[2] + "\n4. " + FGP_list_min[3] + "\n5. " + FGP_list_min[4]);
+            buttons.emplace_back(25, 500, 200, 150, font, "TOP 5:\n1. " + FGP_list_merge[0] + "\n2. " + FGP_list_merge[1] + "\n3. " + FGP_list_merge[2] + "\n4. " + FGP_list_merge[3] + "\n5. " + FGP_list_merge[4]);
+            buttons.emplace_back(575, 500, 200, 150, font, "BOTTOM 5:\n1. " + FGP_list_min[0] + "\n2. " + FGP_list_min[1] + "\n3. " + FGP_list_min[2] + "\n4. " + FGP_list_min[3] + "\n5. " + FGP_list_min[4]);
             buttons.emplace_back(150, 30, 500, 50, font, "PLEASE SELECT AN OPTION FROM DOWN BELOW");
-            buttons.emplace_back(300, 525, 200, 100, font, "Merge Sort: " + FGP_merge_time + "\nMin Heap:" + FGP_min_time);
+            buttons.emplace_back(250, 500, 300, 150, font, "Times(Nanoseconds):\n - Merge Sort(Top 5):\n     " + FGP_merge_time + "\n - Min Heap(Bottom 5):\n     " + FGP_min_time);
             buttons.emplace_back(0, 660, 800, 1, font, "");
             buttons.emplace_back(80, 100, 640, 390,font,"bruh", "map.png");
         }
@@ -227,10 +257,10 @@ int main() {
             buttons.emplace_back(75, 735, 275, 50, font, "Field Goal Percentage");
             buttons.emplace_back(450, 670, 275, 50, font, "Point Differential");
             buttons.emplace_back(450, 735, 275, 50, font, "Free Throw Percentage");
-            buttons.emplace_back(25, 500, 250, 150, font, "TOP 5:\n1. " + PD_list_merge[0] + "\n2. " + PD_list_merge[1] + "\n3. " + PD_list_merge[2] + "\n4. " + PD_list_merge[3] + "\n5. " + PD_list_merge[4]);
-            buttons.emplace_back(525, 500, 250, 150, font, "BOTTOM 5:\n1. " + PD_list_min[0] + "\n2. " + PD_list_min[1] + "\n3. " + PD_list_min[2] + "\n4. " + PD_list_min[3] + "\n5. " + PD_list_min[4]);
+            buttons.emplace_back(25, 500, 200, 150, font, "TOP 5:\n1. " + PD_list_merge[0] + "\n2. " + PD_list_merge[1] + "\n3. " + PD_list_merge[2] + "\n4. " + PD_list_merge[3] + "\n5. " + PD_list_merge[4]);
+            buttons.emplace_back(575, 500, 200, 150, font, "BOTTOM 5:\n1. " + PD_list_min[0] + "\n2. " + PD_list_min[1] + "\n3. " + PD_list_min[2] + "\n4. " + PD_list_min[3] + "\n5. " + PD_list_min[4]);
             buttons.emplace_back(150, 30, 500, 50, font, "PLEASE SELECT AN OPTION FROM DOWN BELOW");
-            buttons.emplace_back(300, 525, 200, 100, font, "Merge Sort: " + PD_merge_time + "\nMin Heap:" + PD_min_time);
+            buttons.emplace_back(250, 500, 300, 150, font, "Times(Nanoseconds):\n - Merge Sort(Top 5):\n     " + PD_merge_time + "\n - Min Heap(Bottom 5):\n     " + PD_min_time);
             buttons.emplace_back(0, 660, 800, 1, font, "");
             buttons.emplace_back(80, 100, 640, 390,font,"bruh", "map.png");
         }
@@ -240,10 +270,10 @@ int main() {
             buttons.emplace_back(75, 735, 275, 50, font, "Field Goal Percentage");
             buttons.emplace_back(450, 670, 275, 50, font, "Point Differential");
             buttons.emplace_back(450, 735, 275, 50, font, "Free Throw Percentage");
-            buttons.emplace_back(25, 500, 250, 150, font, "TOP 5:\n1. " + FTP_list_merge[0] + "\n2. " + FTP_list_merge[1] + "\n3. " + FTP_list_merge[2] + "\n4. " + FTP_list_merge[3] + "\n5. " + FTP_list_merge[4]);
-            buttons.emplace_back(525, 500, 250, 150, font, "BOTTOM 5:\n1. " + FTP_list_min[0] + "\n2. " + FTP_list_min[1] + "\n3. " + FTP_list_min[2] + "\n4. " + FTP_list_min[3] + "\n5. " + FTP_list_min[4]);
+            buttons.emplace_back(25, 500, 200, 150, font, "TOP 5:\n1. " + FTP_list_merge[0] + "\n2. " + FTP_list_merge[1] + "\n3. " + FTP_list_merge[2] + "\n4. " + FTP_list_merge[3] + "\n5. " + FTP_list_merge[4]);
+            buttons.emplace_back(575, 500, 200, 150, font, "BOTTOM 5:\n1. " + FTP_list_min[0] + "\n2. " + FTP_list_min[1] + "\n3. " + FTP_list_min[2] + "\n4. " + FTP_list_min[3] + "\n5. " + FTP_list_min[4]);
             buttons.emplace_back(150, 30, 500, 50, font, "PLEASE SELECT AN OPTION FROM DOWN BELOW");
-            buttons.emplace_back(300, 525, 200, 100, font, "Merge Sort: " + FTP_merge_time + "\nMin Heap:" + FTP_min_time);
+            buttons.emplace_back(250, 500, 300, 150, font, "Times(Nanoseconds):\n - Merge Sort(Top 5):\n     " + FTP_merge_time + "\n - Min Heap(Bottom 5):\n     " + FTP_min_time);
             buttons.emplace_back(0, 660, 800, 1, font, "");
             buttons.emplace_back(80, 100, 640, 390,font,"bruh", "map.png");
         }
@@ -256,13 +286,9 @@ int main() {
             if (event.type == sf::Event::MouseButtonPressed) {
                 if (event.mouseButton.button == sf::Mouse::Left) {
                     sf::Vector2f mouse = window.mapPixelToCoords(sf::Mouse::getPosition(window));
-                    int x = mouse.x;
-                    int y = mouse.y;
-                    cout << x << endl;
-                    cout << y << endl;
+
                     for (auto& button : buttons) {
                         if (button.isMouseOver(window)) {
-                            std::cout << "Button clicked: " << button.text.getString().toAnsiString() << std::endl;
                             if (button.text.getString().toAnsiString() == "Regular Season Wins") {
                                 currentSelection = "Regular Season Wins";
                             }
@@ -498,18 +524,20 @@ int main() {
             window.draw(circle10);
         }
         else if (currentSelection == "Free Throw Percentage") {
+
             sf::CircleShape circle1(15);
             sf::CircleShape circle2(15);
             sf::CircleShape circle3(15);
             sf::CircleShape circle4(15);
             sf::CircleShape circle5(15);
 
-            // Set the fill color of the circle to blue
+            // Set the fill color of the circle to green
             circle1.setFillColor(colorGreen);
             circle2.setFillColor(colorGreen);
             circle3.setFillColor(colorGreen);
             circle4.setFillColor(colorGreen);
             circle5.setFillColor(colorGreen);
+
 
             // Set the position of the circle (x, y) coordinates
             vector<int> coordinates1 = get_team_coordinates(FTP_list_merge[0]);
@@ -539,12 +567,13 @@ int main() {
             sf::CircleShape circle9(15);
             sf::CircleShape circle10(15);
 
-            // Set the fill color of the circle to blue
+            // Set the fill color of the circle to red
             circle6.setFillColor(sf::Color::Red);
             circle7.setFillColor(sf::Color::Red);
             circle8.setFillColor(sf::Color::Red);
             circle9.setFillColor(sf::Color::Red);
             circle10.setFillColor(sf::Color::Red);
+
 
             // Set the position of the circle (x, y) coordinates
             vector<int> coordinates6 = get_team_coordinates(FTP_list_min[0]);
@@ -566,6 +595,7 @@ int main() {
             vector<int> coordinates10 = get_team_coordinates(FTP_list_min[4]);
             circle10.setPosition(coordinates10[0], coordinates10[1]);
             window.draw(circle10);
+
         }
         window.display();
         buttons.clear();
@@ -574,7 +604,6 @@ int main() {
 
     return 0;
 }
-
 
 /*
 Trailblazers: (111, 131)
