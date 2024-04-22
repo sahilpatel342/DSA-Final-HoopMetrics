@@ -110,17 +110,75 @@ int main() {
     load_teams("teams.csv", teams);
     load_games("games.csv", games);
 
-    std::vector<string> regular_season_list_merge = {"Magic", "Heat", "Warriors", "Lakers", "Pacers"};
-    std::vector<string> regular_season_list_min = {"Hornets", "Pistons", "Wizards", "Warriors", "Jazz"};
+    std::vector<string> FGP_list_merge;
+    std::vector<string> FGP_list_min;
+    string FGP_merge_time;
+    string FGP_min_time;
+    vector<pair<string, float>> FGP_data = computeAndSortFG(games);
+    for (int i = 0; i < 5; i++) {
+        FGP_list_merge[i] = FGP_data[i].first;
+    }
+    for (int i = 5; i < 10; i++) {
+        FGP_list_merge[i] = FGP_data[i].first;
+    }
+    FGP_merge_time = FGP_data[10].second;
+    FGP_min_time = FGP_data[10].second;
 
-    std::vector<string> FTP_list_merge = {"Hawks", "Thunder", "Rockets", "Spurs", "Jazz"};
-    std::vector<string> FTP_list_min = {"Suns", "Pistons", "Wizards", "Warriors", "Pelicans"};
+    std::vector<string> regular_season_list_merge;
+    std::vector<string> regular_season_list_min;
+    string regular_season_merge_time;
+    string regular_season_min_time;
+    vector<pair<string, float>> regular_season_data = computeAndSortWins(games);
+    for (int i = 0; i < 5; i++) {
+        FGP_list_merge[i] = regular_season_data[i].first;
+    }
+    for (int i = 5; i < 10; i++) {
+        FGP_list_merge[i] = regular_season_data[i].first;
+    }
+    FGP_merge_time = regular_season_data[10].second;
+    FGP_min_time = regular_season_data[10].second;
 
-    std::vector<string> PD_list_merge = {"Kings", "Pistons", "Wizards", "Celtics", "Jazz"};
-    std::vector<string> PD_list_min = {"Raptors", "76ers", "Wizards", "Bucks", "Timberwolves"};
+    std::vector<string> FTP_list_merge;
+    std::vector<string> FTP_list_min;
+    string FTP_merge_time;
+    string FTP_min_time;
+    vector<pair<string, float>> FTP_data = computeAndSortFG(games);
+    for (int i = 0; i < 5; i++) {
+        FGP_list_merge[i] = FTP_data[i].first;
+    }
+    for (int i = 5; i < 10; i++) {
+        FGP_list_merge[i] = FTP_data[i].first;
+    }
+    FGP_merge_time = FTP_data[10].second;
+    FGP_min_time = FTP_data[10].second;
 
-    std::vector<string> FGP_list_merge = {"Mavericks", "Pistons", "Knicks", "Warriors", "Jazz"};
-    std::vector<string> FGP_list_min = {"Trail Blazers", "Bulls", "Wizards", "Warriors", "76ers"};
+    std::vector<string> PD_list_merge;
+    std::vector<string> PD_list_min;
+    string PD_merge_time;
+    string PD_min_time;
+    vector<pair<string, float>> PD_data = computeAndSortPointDiff(games);
+    for (int i = 0; i < 5; i++) {
+        FGP_list_merge[i] = PD_data[i].first;
+    }
+    for (int i = 5; i < 10; i++) {
+        FGP_list_merge[i] = PD_data[i].first;
+    }
+    FGP_merge_time = PD_data[10].second;
+    FGP_min_time = PD_data[10].second;
+
+
+
+    //std::vector<string> regular_season_list_merge = {"Magic", "Heat", "Warriors", "Lakers", "Pacers"};
+    //std::vector<string> regular_season_list_min = {"Hornets", "Pistons", "Wizards", "Warriors", "Jazz"};
+
+    //std::vector<string> FTP_list_merge = {"Hawks", "Thunder", "Rockets", "Spurs", "Jazz"};
+    //std::vector<string> FTP_list_min = {"Suns", "Pistons", "Wizards", "Warriors", "Pelicans"};
+
+    //std::vector<string> PD_list_merge = {"Kings", "Pistons", "Wizards", "Celtics", "Jazz"};
+    //std::vector<string> PD_list_min = {"Raptors", "76ers", "Wizards", "Bucks", "Timberwolves"};
+
+    //std::vector<string> FGP_list_merge = {"Mavericks", "Pistons", "Knicks", "Warriors", "Jazz"};
+    //std::vector<string> FGP_list_min = {"Trail Blazers", "Bulls", "Wizards", "Warriors", "76ers"};
 
     string currentSelection = "Regular Season Wins";
 
@@ -148,7 +206,7 @@ int main() {
             buttons.emplace_back(25, 500, 250, 150, font, "TOP 5:\n1. " + regular_season_list_merge[0] + "\n2. " + regular_season_list_merge[1] + "\n3. " + regular_season_list_merge[2] + "\n4. " + regular_season_list_merge[3] + "\n5. " + regular_season_list_merge[4]);
             buttons.emplace_back(525, 500, 250, 150, font, "BOTTOM 5:\n1. " + regular_season_list_min[0] + "\n2. " + regular_season_list_min[1] + "\n3. " + regular_season_list_min[2] + "\n4. " + regular_season_list_min[3] + "\n5. " + regular_season_list_min[4]);
             buttons.emplace_back(150, 30, 500, 50, font, "PLEASE SELECT AN OPTION FROM DOWN BELOW");
-            buttons.emplace_back(300, 525, 200, 100, font, "Merge Sort:\nSelection Sort:");
+            buttons.emplace_back(300, 525, 200, 100, font, "Merge Sort: " + regular_season_merge_time + "\nMin Heap:" + regular_season_min_time);
             buttons.emplace_back(0, 660, 800, 1, font, "");
             buttons.emplace_back(80, 100, 640, 390,font,"bruh", "map.png");
         }
@@ -160,7 +218,7 @@ int main() {
             buttons.emplace_back(25, 500, 250, 150, font, "TOP 5:\n1. " + FGP_list_merge[0] + "\n2. " + FGP_list_merge[1] + "\n3. " + FGP_list_merge[2] + "\n4. " + FGP_list_merge[3] + "\n5. " + FGP_list_merge[4]);
             buttons.emplace_back(525, 500, 250, 150, font, "BOTTOM 5:\n1. " + FGP_list_min[0] + "\n2. " + FGP_list_min[1] + "\n3. " + FGP_list_min[2] + "\n4. " + FGP_list_min[3] + "\n5. " + FGP_list_min[4]);
             buttons.emplace_back(150, 30, 500, 50, font, "PLEASE SELECT AN OPTION FROM DOWN BELOW");
-            buttons.emplace_back(300, 525, 200, 100, font, "Merge Sort:\nSelection Sort:");
+            buttons.emplace_back(300, 525, 200, 100, font, "Merge Sort: " + FGP_merge_time + "\nMin Heap:" + FGP_min_time);
             buttons.emplace_back(0, 660, 800, 1, font, "");
             buttons.emplace_back(80, 100, 640, 390,font,"bruh", "map.png");
         }
@@ -172,7 +230,7 @@ int main() {
             buttons.emplace_back(25, 500, 250, 150, font, "TOP 5:\n1. " + PD_list_merge[0] + "\n2. " + PD_list_merge[1] + "\n3. " + PD_list_merge[2] + "\n4. " + PD_list_merge[3] + "\n5. " + PD_list_merge[4]);
             buttons.emplace_back(525, 500, 250, 150, font, "BOTTOM 5:\n1. " + PD_list_min[0] + "\n2. " + PD_list_min[1] + "\n3. " + PD_list_min[2] + "\n4. " + PD_list_min[3] + "\n5. " + PD_list_min[4]);
             buttons.emplace_back(150, 30, 500, 50, font, "PLEASE SELECT AN OPTION FROM DOWN BELOW");
-            buttons.emplace_back(300, 525, 200, 100, font, "Merge Sort:\nSelection Sort:");
+            buttons.emplace_back(300, 525, 200, 100, font, "Merge Sort: " + PD_merge_time + "\nMin Heap:" + PD_min_time);
             buttons.emplace_back(0, 660, 800, 1, font, "");
             buttons.emplace_back(80, 100, 640, 390,font,"bruh", "map.png");
         }
@@ -185,7 +243,7 @@ int main() {
             buttons.emplace_back(25, 500, 250, 150, font, "TOP 5:\n1. " + FTP_list_merge[0] + "\n2. " + FTP_list_merge[1] + "\n3. " + FTP_list_merge[2] + "\n4. " + FTP_list_merge[3] + "\n5. " + FTP_list_merge[4]);
             buttons.emplace_back(525, 500, 250, 150, font, "BOTTOM 5:\n1. " + FTP_list_min[0] + "\n2. " + FTP_list_min[1] + "\n3. " + FTP_list_min[2] + "\n4. " + FTP_list_min[3] + "\n5. " + FTP_list_min[4]);
             buttons.emplace_back(150, 30, 500, 50, font, "PLEASE SELECT AN OPTION FROM DOWN BELOW");
-            buttons.emplace_back(300, 525, 200, 100, font, "Merge Sort:\nSelection Sort:");
+            buttons.emplace_back(300, 525, 200, 100, font, "Merge Sort: " + FTP_merge_time + "\nMin Heap:" + FTP_min_time);
             buttons.emplace_back(0, 660, 800, 1, font, "");
             buttons.emplace_back(80, 100, 640, 390,font,"bruh", "map.png");
         }
