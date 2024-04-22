@@ -6,33 +6,37 @@
 #include <unordered_map>
 #include <queue>
 #include <functional>
+#include <chrono>
 
 using namespace std;
 
+// Structure to represent a basketball team
 struct Team {
-    std::string team_id;
-    std::string team_name;
+    std::string team_id; // Unique identifier for the team
+    std::string team_name; // Unique identifier for the team
     // Additional fields if necessary
 };
 
+// Structure to represent a basketball game
 struct Game {
-    std::string date;
-    int season;
-    std::string home_team_id;
-    std::string visitor_team_id;
-    int pts_home;
-    int pts_away;
-    float fg_pct_home;
-    float ft_pct_home;
+    std::string date;               // Date of the game
+    int season;                     // Season number
+    std::string home_team_id;       // Team ID of the home team
+    std::string visitor_team_id;    // Team ID of the visitor team
+    int pts_home;                   // Points scored by the home team
+    int pts_away;                   // Points scored by the away team
+    float fg_pct_home;              // Field goal percentage of the home team
+    float ft_pct_home;              // Free throw percentage of the home team
     // Additional game stats
 };
 
+// Structure to hold statistics for a team
 struct TeamStats {
-    int wins = 0;
-    float total_fg_pct = 0;
-    float total_ft_pct = 0;
-    int point_differential = 0;
-    int games_count = 0;
+    int wins = 0;                   // Number of wins
+    float total_fg_pct = 0;         // Total field goal percentage
+    float total_ft_pct = 0;         // Total free throw percentage
+    int point_differential = 0;     // Point differential (points scored - points allowed)
+    int games_count = 0;            // Number of games played
 };
 
 // Helper function to split string by delimiter
@@ -47,7 +51,7 @@ std::vector<std::string> split(const std::string& s, char delimiter) {
 }
 
 
-// Load teams data
+// Load teams data from a file
 void load_teams(const std::string& filename, std::unordered_map<std::string, Team>& teams) {
     std::ifstream file(filename);
     std::string line;
@@ -61,6 +65,7 @@ void load_teams(const std::string& filename, std::unordered_map<std::string, Tea
     }
 }
 
+// Load game data from a file
 void load_games(const std::string& filename, std::vector<Game>& games) {
     std::ifstream file(filename);
     std::string line;
@@ -73,13 +78,13 @@ void load_games(const std::string& filename, std::vector<Game>& games) {
             game.season = stoi(tokens[5]);
             game.home_team_id = tokens[3];
             game.visitor_team_id = tokens[4];
-            game.pts_home = stoi(tokens[6]);
-            game.pts_away = stoi(tokens[7]);
+            game.pts_home = stoi(tokens[7]);
+            game.pts_away = stoi(tokens[14]);
             game.fg_pct_home = stof(tokens[8]);
             game.ft_pct_home = stof(tokens[9]);
             games.push_back(game);
 
-            cout << "Loaded FG%: " << game.fg_pct_home << endl; // Debugging line
+            // cout << "Loaded FG%: " << game.fg_pct_home << endl; // Debugging line
         } catch (const std::exception& e) {
             cerr << "Error processing line: " << line << endl;
             cerr << "Exception: " << e.what() << endl;
@@ -87,11 +92,13 @@ void load_games(const std::string& filename, std::vector<Game>& games) {
     }
 }
 
+// Merge function for merge sort
 void merge(vector<pair<string, float>>& left, vector<pair<string, float>>& right, vector<pair<string, float>>& bars) {
     int nL = left.size();
     int nR = right.size();
     int i = 0, j = 0, k = 0;
 
+    // Merge the two arrays
     while (j < nL && k < nR) {
         if (left[j].second > right[k].second) {
             bars[i] = left[j];
@@ -102,16 +109,21 @@ void merge(vector<pair<string, float>>& left, vector<pair<string, float>>& right
         }
         i++;
     }
+
+    // Copy the remaining elements of left, if any
     while (j < nL) {
         bars[i] = left[j];
         j++; i++;
     }
+
+    // Copy the remaining elements of right, if any
     while (k < nR) {
         bars[i] = right[k];
         k++; i++;
     }
 }
 
+// Merge sort algorithm
 void mergeSort(vector<pair<string, float>>& bar) {
     if (bar.size() <= 1) return;
 
@@ -119,57 +131,194 @@ void mergeSort(vector<pair<string, float>>& bar) {
     vector<pair<string, float>> left;
     vector<pair<string, float>> right;
 
+    // Split the array into two halves
     for (int j = 0; j < mid; j++)
         left.push_back(bar[j]);
     for (int j = 0; j < (bar.size() - mid); j++)
         right.push_back(bar[mid + j]);
 
+    // Recursively sort the two halves
     mergeSort(left);
     mergeSort(right);
+
+    // Merge the sorted halves
     merge(left, right, bar);
 }
 
+// Compute and sort metrics based on game data
 void computeAndSortMetrics(const vector<Game>& games) {
     unordered_map<string, TeamStats> stats;
 
+    // Calculate statistics for each team
     for (const auto& game : games) {
         auto& team = stats[game.home_team_id];
-        team.wins += (game.pts_home > game.pts_away);
+        if(game.pts_home > game.pts_away)
+            team.wins++;
         team.total_fg_pct += game.fg_pct_home; // Summing up
         team.total_ft_pct += game.ft_pct_home;
         team.point_differential += (game.pts_home - game.pts_away);
         team.games_count++;
     }
 
-    // Sort and print best and worst by FG%
+    // Declare variables to track time.
+    chrono::steady_clock::time_point begin;
+    chrono::steady_clock::time_point end;
+
+    // --------Sort & print best and worst team by FG%--------
+    cout << "--------FG%--------" << endl;
+    // Create vector list of pairs with home_team_id being the first and the average FG% being the second element in the pair.
     vector<pair<string, float>> fg_pct_list;
     for (const auto& stat : stats) {
         if (stat.second.games_count > 0) {
             fg_pct_list.push_back({stat.first, stat.second.total_fg_pct / stat.second.games_count});
-            cout << "Team ID: " << stat.first << " - Average FG%: " << stat.second.total_fg_pct / stat.second.games_count << endl; // Debugging line
+            // cout << "Team ID: " << stat.first << " - Average FG%: " << stat.second.total_fg_pct / stat.second.games_count << endl; // Debugging line
         }
     }
 
-    mergeSort(fg_pct_list);
-    cout << "Best Home Court FG%:" << endl;
-    for (auto& team : fg_pct_list) {
-        cout << "Team ID: " << team.first << " - FG%: " << team.second << endl;
-    }
-
-    // Using Min Heap for worst FG%
+    // Use Min Heap for worst FG%
     priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>> min_heap;
+    begin = chrono::steady_clock::now(); // Record time at start of adding to min heap.
     for (auto& team : fg_pct_list) {
         min_heap.push({team.second, team.first});
     }
+    end = chrono::steady_clock::now(); // Record time at end of adding to min heap.
+    // Calculate and print time taken.
+    cout << "Time taken to add to min heap = " << chrono::duration_cast<std::chrono::nanoseconds> (end - begin).count() << "[ns]" << endl;
+    // Print worst home court FG%
+    cout << "Worst Home Court FG%: ";
+    auto team = min_heap.top();
+    cout << "Team ID: " << team.second << " - FG%: " << team.first << endl;
 
-    cout << "Worst Home Court FG%:" << endl;
-    while (!min_heap.empty()) {
-        auto team = min_heap.top();
-        min_heap.pop();
-        cout << "Team ID: " << team.second << " - FG%: " << team.first << endl;
+    // Sort teams by FG% using merge sort to find best FG%
+    begin = chrono::steady_clock::now(); // Record time at start of merge sort.
+    mergeSort(fg_pct_list);
+    end = chrono::steady_clock::now(); // Record time at end of merge sort.
+    // Calculate and print time taken.
+    cout << "Time taken to merge sort = " << chrono::duration_cast<std::chrono::nanoseconds> (end - begin).count() << "[ns]" << endl;
+    // Print best home court FG%
+    cout << "Best Home Court FG%: ";
+    auto team1 = fg_pct_list[0];
+    cout << "Team ID: " << team1.first << " - FG%: " << team1.second << endl;
+
+
+
+    // ----------Sort & print best and worst teams by % Regular Season Wins-----------
+    cout << "--------% Regular Season Wins--------" << endl;
+    // Create vector list of pairs with home_team_id being the first and the % of Regular Season games Won being the second element in the pair.
+    vector<pair<string, float>> win_pct_list;
+    for (const auto& stat : stats) {
+        if (stat.second.games_count > 0) {
+            win_pct_list.push_back({stat.first, (static_cast<float>(stat.second.wins) / stat.second.games_count)});
+            //cout << "Team ID: " << stat.first << " - # of Regular Season Games Won: " << stat.second.wins << "- Games count:" << stat.second.games_count << endl; // Debugging line
+            //cout << "Team ID: " << stat.first << " - % of Regular Season Games Won: " << (static_cast<float>(stat.second.wins) / stat.second.games_count) << endl; // Debugging line
+        }
     }
+
+    // Use Min Heap for worst win%
+    min_heap = priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>>(); // Clear min heap.
+    begin = chrono::steady_clock::now(); // Record time at start of adding to min heap.
+    for (auto& team : win_pct_list) {
+        min_heap.push({team.second, team.first});
+    }
+    end = chrono::steady_clock::now(); // Record time at end of adding to min heap.
+    // Calculate and print time taken.
+    cout << "Time taken to add to min heap = " << chrono::duration_cast<std::chrono::nanoseconds> (end - begin).count() << "[ns]" << endl;
+    // Print worst home court win%
+    cout << "Worst Home Court Win%: ";
+    team = min_heap.top();
+    cout << "Team ID: " << team.second << " - % of Regular Season Games Won: " << team.first << endl;
+
+    // Sort teams by % of Regular Season games Won using merge sort to find best win%
+    begin = chrono::steady_clock::now(); // Record time at start of merge sort.
+    mergeSort(win_pct_list);
+    end = chrono::steady_clock::now(); // Record time at end of merge sort.
+    // Calculate and print time taken.
+    cout << "Time taken to merge sort = " << chrono::duration_cast<std::chrono::nanoseconds> (end - begin).count() << "[ns]" << endl;
+    // Print best home court win%
+    cout << "Best Home Court Win%: ";
+    team1 = win_pct_list[0];
+    cout << "Team ID: " << team1.first << " - % of Regular Season Games Won: " << team1.second << endl;
+
+    // ----------Sort & print best and worst team by Point Differential Average----------
+    cout << "--------Point Differential Average--------" << endl;
+    // Create vector list of pairs with home_team_id being the first and the average point differential average being the second element in the pair.
+    vector<pair<string, float>> pointdiff_avg_list;
+    for (const auto& stat : stats) {
+        if (stat.second.games_count > 0) {
+            pointdiff_avg_list.push_back({stat.first, ((float)stat.second.point_differential / stat.second.games_count)});
+            // cout << "Team ID: " << stat.first << " - Average Point Differential: " << stat.second.point_differential / stat.second.games_count << endl; // Debugging line
+        }
+    }
+
+    // Use Min Heap for worst point differential avg
+    min_heap = priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>>(); // Clear min heap.
+    begin = chrono::steady_clock::now(); // Record time at start of adding to min heap.
+    for (auto& team : pointdiff_avg_list) {
+        min_heap.push({team.second, team.first});
+    }
+    end = chrono::steady_clock::now(); // Record time at end of adding to min heap.
+    // Calculate and print time taken.
+    cout << "Time taken to add to min heap = " << chrono::duration_cast<std::chrono::nanoseconds> (end - begin).count() << "[ns]" << endl;
+    // Print worst home court point differential avg
+    cout << "Worst Home Court Average Point Differential: ";
+    team = min_heap.top();
+    cout << "Team ID: " << team.second << " - Average Point Differential: " << team.first << endl;
+
+
+    // Sort teams by point differential avg using merge sort to find best Point Differential Average
+    begin = chrono::steady_clock::now(); // Record time at start of merge sort.
+    mergeSort(pointdiff_avg_list);
+    end = chrono::steady_clock::now(); // Record time at end of merge sort.
+    // Calculate and print time taken.
+    cout << "Time taken to merge sort = " << chrono::duration_cast<std::chrono::nanoseconds> (end - begin).count() << "[ns]" << endl;
+    // Print best point differential avg
+    cout << "Best Home Court Average Point Differential: ";
+    team1 = pointdiff_avg_list[0];
+    cout << "Team ID: " << team1.first << " - Average Point Differential: " << team1.second << endl;
+
+
+    // ----------Sort & print best and worst team by FT%----------
+    cout << "--------FT%--------" << endl;
+    // Create vector list of pairs with home_team_id being the first and the average FT% being the second element in the pair.
+    vector<pair<string, float>> ft_pct_list;
+    for (const auto& stat : stats) {
+        if (stat.second.games_count > 0) {
+            ft_pct_list.push_back({stat.first, stat.second.total_ft_pct / stat.second.games_count});
+            // cout << "Team ID: " << stat.first << " - Average FT%: " << stat.second.total_ft_pct / stat.second.games_count << endl; // Debugging line
+        }
+    }
+
+    // Use Min Heap for worst FT%
+    min_heap = priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>>(); // Clear min heap.
+    begin = chrono::steady_clock::now(); // Record time at start of adding to min heap.
+    for (auto& team : ft_pct_list) {
+        min_heap.push({team.second, team.first});
+    }
+    end = chrono::steady_clock::now(); // Record time at end of adding to min heap.
+    // Calculate and print time taken.
+    cout << "Time taken to add to min heap = " << chrono::duration_cast<std::chrono::nanoseconds> (end - begin).count() << "[ns]" << endl;
+    // Print worst home court FT%
+    cout << "Worst Home Court FT%: ";
+    team = min_heap.top();
+    min_heap.pop();
+    cout << "Team ID: " << team.second << " - FT%: " << team.first << endl;
+
+
+    // Sort teams by FT% using merge sort to find best FT%
+    begin = chrono::steady_clock::now(); // Record time at start of merge sort.
+    mergeSort(ft_pct_list);
+    end = chrono::steady_clock::now(); // Record time at end of merge sort.
+    // Calculate and print time taken.
+    cout << "Time taken to merge sort = " << chrono::duration_cast<std::chrono::nanoseconds> (end - begin).count() << "[ns]" << endl;
+    // Print best home court FT%
+    cout << "Best Home Court FT%: ";
+    team1 = ft_pct_list[0];
+    cout << "Team ID: " << team1.first << " - FT%: " << team1.second << endl;
+
+
 }
 
+// Main function
 int main() {
     vector<Game> games;
     load_games("games.csv", games);
